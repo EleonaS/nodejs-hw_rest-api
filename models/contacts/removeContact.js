@@ -1,6 +1,6 @@
 const fs = require('fs/promises');
 const listContacts = require("./listContacts");
-const filePath=require("./file_path");
+const filePath=require("../../helpers/file_path");
 
 const removeContact = async (id) => {
   const contacts = await listContacts();

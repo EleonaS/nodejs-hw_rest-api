@@ -1,5 +1,5 @@
 const createError = require("http-errors");
-const contacts = require('../../models/contacts');
+const contacts = require('../../models/');
 
 const update = async (req, res) => {
   const { id } = req.params;

@@ -1,10 +1,9 @@
 const createError = require("http-errors");
-const contacts = require('../../models/');
+const  { Contact } = require('../../models');
 
 const update = async (req, res) => {
   const { id } = req.params;
-  const { name, email, phone } = req.body;
-  const result = await contacts.updateContact(id, name, email, phone);
+  const result = await Contact.findByIdAndUpdate(id, req.body, {new: true});
   if (!result) {
     throw createError(404, `Contact with id=${id} not found!`);
   };

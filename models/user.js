@@ -22,35 +22,46 @@ const userSchema = Schema(
       type: String,
       default: null,
     },
-
     avatarURL: {
       type: String,
-    }
+    },
+    verify: {
+        type: Boolean,
+        default: false,
+      },
+      verificationToken: {
+        type: String,
+        required: [true, 'Verify token is required'],
+      },
+
+
   },
   { versionKey: false, timestamps: true }
 );
 
+userSchema.methods.setPassword = function (password) {
+  this.password = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+};
 
-userSchema.methods.setPassword = function(password){
-    this.password = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
-}
-
-userSchema.methods.comparePassword = function(password){
-    return bcrypt.compareSync(password, this.password);
-}
+userSchema.methods.comparePassword = function (password) {
+  return bcrypt.compareSync(password, this.password);
+};
 
 const joiRegisterSchema = Joi.object({
-
   email: Joi.string().required(),
   password: Joi.string().min(6).max(10).required(),
-    subscription: Joi.string().valid("starter", "pro", "business"),
+  subscription: Joi.string().valid("starter", "pro", "business"),
   token: Joi.string(),
-})
+});
 
 const joiLoginSchema = Joi.object({
   email: Joi.string().required(),password: Joi.string().min(6).max(10).required(),
 });
 
+const verifyEmailschema = Joi.object({
+  email: Joi.string().required(),
+});
+
 const User = model('user', userSchema);
 
-module.exports = { User, joiRegisterSchema, joiLoginSchema };
+module.exports = { User, joiRegisterSchema, joiLoginSchema,verifyEmailschema };
